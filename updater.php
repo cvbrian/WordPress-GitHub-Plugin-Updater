@@ -267,11 +267,15 @@ class WP_GitHub_Updater {
 	 */
 	public function remote_get( $query ) {
 		if ( ! empty( $this->config['access_token'] ) )
-			$query = add_query_arg( array( 'access_token' => $this->config['access_token'] ), $query );
+			$args = [
+				'sslverify' => $this->config['sslverify'],
+				'headers' => [
+					'Authorization' => 'token ' . $this->config['access_token'],
+				],
+			];
 
-		$raw_response = wp_remote_get( $query, array(
-			'sslverify' => $this->config['sslverify']
-		) );
+
+		$raw_response = wp_remote_get( $query, $args );
 
 		return $raw_response;
 	}
